@@ -3,6 +3,7 @@
     <string name="app_name">Task Widget</string>
     <string name="widget_name">MD Task Widget</string>
     <string name="no_tasks">No tasks found</string>
+    <string name="vault_name_label">Obsidian Vault Name</string>
     <string name="folder_path_label">Folder Path</string>
     <string name="filter_include_text_label">Include text (comma-separated)</string>
     <string name="filter_exclude_text_label">Exclude text (comma-separated)</string>

@@ -13,12 +13,14 @@ import java.util.List;
  */
 public class FilterConfig {
     private static final String PREFS_NAME = "com.taskwidget.app.prefs";
+    private static final String KEY_VAULT = "_vault";
     private static final String KEY_FOLDER = "_folder";
     private static final String KEY_INCLUDE_TEXT = "_include_text";
     private static final String KEY_EXCLUDE_TEXT = "_exclude_text";
     private static final String KEY_INCLUDE_PATH = "_include_path";
     private static final String KEY_EXCLUDE_PATH = "_exclude_path";
 
+    private String vaultName;
     private String folderPath;
     private List<String> includeTexts;
     private List<String> excludeTexts;
@@ -26,12 +28,16 @@ public class FilterConfig {
     private List<String> excludePaths;
 
     public FilterConfig() {
+        this.vaultName = "2";
         this.folderPath = "/storage/emulated/0/Download/yandexSync/2/main/";
         this.includeTexts = new ArrayList<>();
         this.excludeTexts = new ArrayList<>();
         this.includePaths = new ArrayList<>();
         this.excludePaths = new ArrayList<>();
     }
+
+    public String getVaultName() { return vaultName; }
+    public void setVaultName(String vaultName) { this.vaultName = vaultName; }
 
     public String getFolderPath() { return folderPath; }
     public void setFolderPath(String folderPath) { this.folderPath = folderPath; }
@@ -56,6 +62,7 @@ public class FilterConfig {
         SharedPreferences.Editor editor = prefs.edit();
         String prefix = String.valueOf(appWidgetId);
 
+        editor.putString(prefix + KEY_VAULT, vaultName);
         editor.putString(prefix + KEY_FOLDER, folderPath);
         editor.putString(prefix + KEY_INCLUDE_TEXT, joinList(includeTexts));
         editor.putString(prefix + KEY_EXCLUDE_TEXT, joinList(excludeTexts));
@@ -72,6 +79,7 @@ public class FilterConfig {
         String prefix = String.valueOf(appWidgetId);
 
         FilterConfig config = new FilterConfig();
+        config.vaultName = prefs.getString(prefix + KEY_VAULT, config.vaultName);
         config.folderPath = prefs.getString(prefix + KEY_FOLDER, config.folderPath);
         config.includeTexts = splitList(prefs.getString(prefix + KEY_INCLUDE_TEXT, ""));
         config.excludeTexts = splitList(prefs.getString(prefix + KEY_EXCLUDE_TEXT, ""));
@@ -88,6 +96,7 @@ public class FilterConfig {
         SharedPreferences.Editor editor = prefs.edit();
         String prefix = String.valueOf(appWidgetId);
 
+        editor.remove(prefix + KEY_VAULT);
         editor.remove(prefix + KEY_FOLDER);
         editor.remove(prefix + KEY_INCLUDE_TEXT);
         editor.remove(prefix + KEY_EXCLUDE_TEXT);

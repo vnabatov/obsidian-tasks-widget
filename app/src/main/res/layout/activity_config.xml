@@ -18,6 +18,24 @@
             android:textColor="@color/colorPrimary"
             android:layout_marginBottom="16dp" />
 
+        <!-- Vault name -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/vault_name_label"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/edit_vault_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="2"
+            android:inputType="text"
+            android:textSize="14sp"
+            android:layout_marginBottom="16dp" />
+
         <!-- Folder path -->
         <TextView
             android:layout_width="match_parent"

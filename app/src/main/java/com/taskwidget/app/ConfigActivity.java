@@ -26,6 +26,7 @@ public class ConfigActivity extends AppCompatActivity {
     private static final int STORAGE_PERMISSION_CODE = 100;
     private static final int MANAGE_STORAGE_CODE = 101;
 
+    private EditText editVaultName;
     private EditText editFolderPath;
     private EditText editIncludeText;
     private EditText editExcludeText;
@@ -47,6 +48,7 @@ public class ConfigActivity extends AppCompatActivity {
                     AppWidgetManager.INVALID_APPWIDGET_ID);
         }
 
+        editVaultName = findViewById(R.id.edit_vault_name);
         editFolderPath = findViewById(R.id.edit_folder_path);
         editIncludeText = findViewById(R.id.edit_include_text);
         editExcludeText = findViewById(R.id.edit_exclude_text);
@@ -68,6 +70,7 @@ public class ConfigActivity extends AppCompatActivity {
         int id = (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) ? appWidgetId : 0;
         FilterConfig config = FilterConfig.load(this, id);
 
+        editVaultName.setText(config.getVaultName());
         editFolderPath.setText(config.getFolderPath());
         editIncludeText.setText(joinList(config.getIncludeTexts()));
         editExcludeText.setText(joinList(config.getExcludeTexts()));
@@ -77,6 +80,7 @@ public class ConfigActivity extends AppCompatActivity {
 
     private void saveConfig() {
         FilterConfig config = new FilterConfig();
+        config.setVaultName(editVaultName.getText().toString().trim());
         config.setFolderPath(editFolderPath.getText().toString().trim());
         config.setIncludeTexts(splitList(editIncludeText.getText().toString()));
         config.setExcludeTexts(splitList(editExcludeText.getText().toString()));

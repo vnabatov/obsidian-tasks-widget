@@ -77,6 +77,14 @@ public class TaskWidgetProvider extends AppWidgetProvider {
                 context, appWidgetId, configIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         views.setOnClickPendingIntent(R.id.widget_title, configPending);
 
+        // Click on list item opens file in Obsidian
+        Intent itemIntent = new Intent(Intent.ACTION_VIEW);
+        itemIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent itemPending = PendingIntent.getActivity(
+                context, appWidgetId + 1000, itemIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+        views.setPendingIntentTemplate(R.id.widget_list, itemPending);
+
         appWidgetManager.updateAppWidget(appWidgetId, views);
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list);
     }

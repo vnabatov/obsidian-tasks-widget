@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="widget_bg">#1E1E1E</color>
+    <color name="widget_header_bg">#2D2D2D</color>
+    <color name="widget_header_text">#E0E0E0</color>
+    <color name="task_text">#E0E0E0</color>
+    <color name="task_date_past">#F28B82</color>
+    <color name="task_date_today">#FDD663</color>
+    <color name="task_file_text">#9AA0A6</color>
+    <color name="task_item_bg">#2D2D2D</color>
+    <color name="divider">#3C3C3C</color>
+    <color name="colorPrimary">#8AB4F8</color>
+    <color name="colorPrimaryDark">#1E1E1E</color>
+    <color name="colorAccent">#8AB4F8</color>
+    <color name="config_bg">#121212</color>
+    <color name="config_text">#E0E0E0</color>
+    <color name="config_hint">#9AA0A6</color>
+    <color name="config_input_bg">#2D2D2D</color>
+</resources>

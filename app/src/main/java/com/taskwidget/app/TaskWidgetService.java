@@ -2,6 +2,7 @@ package com.taskwidget.app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -22,6 +23,8 @@ public class TaskWidgetService extends RemoteViewsService {
     static class TaskRemoteViewsFactory implements RemoteViewsFactory {
         private Context context;
         private int appWidgetId;
+        private String folderPath;
+        private String vaultName;
         private List<TaskItem> tasks = new ArrayList<>();
 
         TaskRemoteViewsFactory(Context context, Intent intent) {
@@ -43,7 +46,9 @@ public class TaskWidgetService extends RemoteViewsService {
 
         private void loadTasks() {
             FilterConfig config = FilterConfig.load(context, appWidgetId);
-            tasks = TaskParser.parseTasks(config.getFolderPath(), config);
+            folderPath = config.getFolderPath();
+            vaultName = config.getVaultName();
+            tasks = TaskParser.parseTasks(folderPath, config);
         }
 
         @Override
@@ -65,7 +70,10 @@ public class TaskWidgetService extends RemoteViewsService {
             TaskItem task = tasks.get(position);
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_task_item);
 
-            views.setTextViewText(R.id.item_task_text, task.getText());
+            String displayText = task.getPriorityEmoji().isEmpty()
+                    ? task.getText()
+                    : task.getPriorityEmoji() + " " + task.getText();
+            views.setTextViewText(R.id.item_task_text, displayText);
             views.setTextViewText(R.id.item_task_date, "📅 " + task.getDate());
             views.setTextViewText(R.id.item_task_file, task.getFileName());
 
@@ -83,6 +91,34 @@ public class TaskWidgetService extends RemoteViewsService {
             } catch (Exception e) {
                 // Default color
             }
+
+            // Build Obsidian Advanced URI for clicking to open file
+            // obsidian://adv-uri?vault=VAULT&filepath=RELATIVE_PATH
+            // Compute filepath relative to the vault root
+            // e.g. folder=/storage/.../2/main/ vault=2 => vault root ends at /2/
+            // filepath = main/ + relative file path
+            String vaultSuffix = "/" + vaultName + "/";
+            String filepath;
+            if (folderPath.contains(vaultSuffix)) {
+                // Get the part after the vault name in the folder path
+                int vaultEnd = folderPath.indexOf(vaultSuffix) + vaultSuffix.length();
+                String pathAfterVault = folderPath.substring(vaultEnd);
+                // task.getFilePath() is relative and may start with /
+                String relPath = task.getFilePath();
+                if (relPath.startsWith("/")) relPath = relPath.substring(1);
+                filepath = pathAfterVault + relPath;
+            } else {
+                // Fallback: just use relative path
+                String relPath = task.getFilePath();
+                if (relPath.startsWith("/")) relPath = relPath.substring(1);
+                filepath = relPath;
+            }
+
+            String obsidianUri = "obsidian://adv-uri?vault=" + Uri.encode(vaultName)
+                    + "&filepath=" + Uri.encode(filepath);
+            Intent fillIntent = new Intent();
+            fillIntent.setData(Uri.parse(obsidianUri));
+            views.setOnClickFillInIntent(R.id.item_task_root, fillIntent);
 
             return views;
         }

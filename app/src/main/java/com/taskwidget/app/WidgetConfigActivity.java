@@ -16,6 +16,7 @@ public class WidgetConfigActivity extends AppCompatActivity {
 
     private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 
+    private EditText editVaultName;
     private EditText editFolderPath;
     private EditText editIncludeText;
     private EditText editExcludeText;
@@ -44,6 +45,7 @@ public class WidgetConfigActivity extends AppCompatActivity {
             return;
         }
 
+        editVaultName = findViewById(R.id.edit_vault_name);
         editFolderPath = findViewById(R.id.edit_folder_path);
         editIncludeText = findViewById(R.id.edit_include_text);
         editExcludeText = findViewById(R.id.edit_exclude_text);
@@ -52,6 +54,7 @@ public class WidgetConfigActivity extends AppCompatActivity {
 
         // Load defaults from global config (id=0)
         FilterConfig defaults = FilterConfig.load(this, 0);
+        editVaultName.setText(defaults.getVaultName());
         editFolderPath.setText(defaults.getFolderPath());
         editIncludeText.setText(joinList(defaults.getIncludeTexts()));
         editExcludeText.setText(joinList(defaults.getExcludeTexts()));
@@ -64,6 +67,7 @@ public class WidgetConfigActivity extends AppCompatActivity {
 
     private void saveAndFinish() {
         FilterConfig config = new FilterConfig();
+        config.setVaultName(editVaultName.getText().toString().trim());
         config.setFolderPath(editFolderPath.getText().toString().trim());
         config.setIncludeTexts(splitList(editIncludeText.getText().toString()));
         config.setExcludeTexts(splitList(editExcludeText.getText().toString()));
