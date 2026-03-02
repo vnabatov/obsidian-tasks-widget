@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/config_title"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Folder path -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/folder_path_label"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/edit_folder_path"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="/storage/emulated/0/Download/..."
+            android:inputType="text"
+            android:textSize="14sp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Include text filter -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_include_text_label"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/edit_include_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="keyword1, keyword2 (empty = include all)"
+            android:inputType="text"
+            android:textSize="14sp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Exclude text filter -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_exclude_text_label"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/edit_exclude_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="keyword1, keyword2 (empty = exclude none)"
+            android:inputType="text"
+            android:textSize="14sp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Include path filter -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_include_path_label"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/edit_include_path"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="path1, path2 (empty = include all)"
+            android:inputType="text"
+            android:textSize="14sp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Exclude path filter -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_exclude_path_label"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/edit_exclude_path"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="path1, path2 (empty = exclude none)"
+            android:inputType="text"
+            android:textSize="14sp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Save button -->
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+</ScrollView>

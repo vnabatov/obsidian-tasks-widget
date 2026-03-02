@@ -1,0 +1,29 @@
+# Build outputs
+*.apk
+*.aab
+*.dex
+*.class
+app/build/
+build/
+.gradle/
+
+# Local config
+local.properties
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Gradle wrapper jar
+gradle/wrapper/gradle-wrapper.jar
+
+# Node (if any)
+node_modules/
+
+# Logs
+*.log

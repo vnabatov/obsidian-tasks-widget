@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="@android:color/white">
+
+    <!-- Task text -->
+    <TextView
+        android:id="@+id/item_task_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/task_text"
+        android:textSize="13sp"
+        android:maxLines="3"
+        android:ellipsize="end" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="2dp"
+        android:gravity="center_vertical">
+
+        <!-- Date -->
+        <TextView
+            android:id="@+id/item_task_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:textColor="@color/task_date_past"
+            android:paddingEnd="8dp" />
+
+        <!-- Source file -->
+        <TextView
+            android:id="@+id/item_task_file"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="10sp"
+            android:textColor="@color/task_file_text"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:gravity="end" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Task Widget</string>
+    <string name="widget_name">MD Task Widget</string>
+    <string name="no_tasks">No tasks found</string>
+    <string name="folder_path_label">Folder Path</string>
+    <string name="filter_include_text_label">Include text (comma-separated)</string>
+    <string name="filter_exclude_text_label">Exclude text (comma-separated)</string>
+    <string name="filter_include_path_label">Include paths (comma-separated)</string>
+    <string name="filter_exclude_path_label">Exclude paths (comma-separated)</string>
+    <string name="save">Save</string>
+    <string name="refresh">Refresh</string>
+    <string name="config_title">Task Widget Settings</string>
+    <string name="default_folder">/storage/emulated/0/Download/yandexSync/2/main/</string>
+</resources>
