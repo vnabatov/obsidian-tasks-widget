@@ -8,13 +8,19 @@ public class TaskItem implements Comparable<TaskItem> {
     private String date;
     private String filePath;
     private String fileName;
+    private String rawLine;
     private int priority; // 0=urgent, 1=highest(🔺), 2=high(🔼), 3=normal, 4=low(🔽), 5=lowest(⏬)
     private String priorityEmoji;
 
     public TaskItem(String text, String date, String filePath) {
+        this(text, date, filePath, null);
+    }
+
+    public TaskItem(String text, String date, String filePath, String rawLine) {
         this.text = text;
         this.date = date;
         this.filePath = filePath;
+        this.rawLine = rawLine;
         this.priority = parsePriority(text);
         this.priorityEmoji = getPriorityEmoji(this.priority);
         // Extract just the file name from the full path
@@ -50,6 +56,7 @@ public class TaskItem implements Comparable<TaskItem> {
     public String getDate() { return date; }
     public String getFilePath() { return filePath; }
     public String getFileName() { return fileName; }
+    public String getRawLine() { return rawLine; }
     public int getPriority() { return priority; }
     public String getPriorityEmoji() { return priorityEmoji; }
 

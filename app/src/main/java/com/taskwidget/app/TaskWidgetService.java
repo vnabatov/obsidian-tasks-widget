@@ -116,9 +116,25 @@ public class TaskWidgetService extends RemoteViewsService {
 
             String obsidianUri = "obsidian://adv-uri?vault=" + Uri.encode(vaultName)
                     + "&filepath=" + Uri.encode(filepath);
-            Intent fillIntent = new Intent();
-            fillIntent.setData(Uri.parse(obsidianUri));
-            views.setOnClickFillInIntent(R.id.item_task_root, fillIntent);
+
+            // Fill-in intent for opening in Obsidian (click on task text)
+            Intent openIntent = new Intent();
+            openIntent.setAction(TaskWidgetProvider.ACTION_OPEN_OBSIDIAN);
+            openIntent.putExtra(TaskWidgetProvider.EXTRA_OBSIDIAN_URI, obsidianUri);
+            views.setOnClickFillInIntent(R.id.item_task_text, openIntent);
+
+            // Fill-in intent for completing task (click on checkbox)
+            String absoluteFilePath = folderPath;
+            if (!absoluteFilePath.endsWith("/")) absoluteFilePath += "/";
+            String fileRelPath = task.getFilePath();
+            if (fileRelPath.startsWith("/")) fileRelPath = fileRelPath.substring(1);
+            absoluteFilePath += fileRelPath;
+
+            Intent completeIntent = new Intent();
+            completeIntent.setAction(TaskWidgetProvider.ACTION_COMPLETE);
+            completeIntent.putExtra(TaskWidgetProvider.EXTRA_FILE_PATH, absoluteFilePath);
+            completeIntent.putExtra(TaskWidgetProvider.EXTRA_RAW_LINE, task.getRawLine());
+            views.setOnClickFillInIntent(R.id.item_task_complete, completeIntent);
 
             return views;
         }

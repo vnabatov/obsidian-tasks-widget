@@ -97,7 +97,7 @@ public class TaskParser {
                         continue;
                     }
 
-                    tasks.add(new TaskItem(taskText, dateStr, relativePath));
+                    tasks.add(new TaskItem(taskText, dateStr, relativePath, line));
                 }
             }
         } catch (IOException e) {

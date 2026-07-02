@@ -8,7 +8,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,6 +25,11 @@ import java.util.List;
 public class TaskWidgetProvider extends AppWidgetProvider {
 
     public static final String ACTION_REFRESH = "com.taskwidget.app.ACTION_REFRESH";
+    public static final String ACTION_COMPLETE = "com.taskwidget.app.ACTION_COMPLETE";
+    public static final String ACTION_OPEN_OBSIDIAN = "com.taskwidget.app.ACTION_OPEN_OBSIDIAN";
+    public static final String EXTRA_FILE_PATH = "extra_file_path";
+    public static final String EXTRA_RAW_LINE = "extra_raw_line";
+    public static final String EXTRA_OBSIDIAN_URI = "extra_obsidian_uri";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -28,16 +41,77 @@ public class TaskWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
+        String action = intent.getAction();
 
-        if (ACTION_REFRESH.equals(intent.getAction())) {
+        if (ACTION_REFRESH.equals(action)) {
             AppWidgetManager manager = AppWidgetManager.getInstance(context);
             ComponentName widget = new ComponentName(context, TaskWidgetProvider.class);
             int[] ids = manager.getAppWidgetIds(widget);
-            // Notify data changed so RemoteViewsFactory reloads
             for (int id : ids) {
                 manager.notifyAppWidgetViewDataChanged(id, R.id.widget_list);
                 updateWidget(context, manager, id);
             }
+        } else if (ACTION_COMPLETE.equals(action)) {
+            String filePath = intent.getStringExtra(EXTRA_FILE_PATH);
+            String rawLine = intent.getStringExtra(EXTRA_RAW_LINE);
+            if (filePath != null && rawLine != null) {
+                boolean success = completeTask(filePath, rawLine);
+                if (success) {
+                    Toast.makeText(context, "✅ Task completed", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "❌ Could not complete task", Toast.LENGTH_SHORT).show();
+                }
+                // Refresh all widgets
+                AppWidgetManager manager = AppWidgetManager.getInstance(context);
+                ComponentName widget = new ComponentName(context, TaskWidgetProvider.class);
+                int[] ids = manager.getAppWidgetIds(widget);
+                for (int id : ids) {
+                    manager.notifyAppWidgetViewDataChanged(id, R.id.widget_list);
+                    updateWidget(context, manager, id);
+                }
+            }
+        } else if (ACTION_OPEN_OBSIDIAN.equals(action)) {
+            String obsidianUri = intent.getStringExtra(EXTRA_OBSIDIAN_URI);
+            if (obsidianUri != null) {
+                Intent viewIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(obsidianUri));
+                viewIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(viewIntent);
+            }
+        }
+    }
+
+    /**
+     * Complete a task by replacing "- [ ]" with "- [x]" in the file.
+     */
+    private static boolean completeTask(String absoluteFilePath, String rawLine) {
+        File file = new File(absoluteFilePath);
+        if (!file.exists()) return false;
+
+        try {
+            List<String> lines = new ArrayList<>();
+            boolean found = false;
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (!found && line.equals(rawLine)) {
+                        // Replace first occurrence of "[ ]" with "[x]"
+                        line = line.replaceFirst("\\[\\s*\\]", "[x]");
+                        found = true;
+                    }
+                    lines.add(line);
+                }
+            }
+            if (!found) return false;
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                for (int i = 0; i < lines.size(); i++) {
+                    writer.write(lines.get(i));
+                    if (i < lines.size() - 1) writer.newLine();
+                }
+            }
+            return true;
+        } catch (IOException e) {
+            return false;
         }
     }
 
@@ -77,10 +151,9 @@ public class TaskWidgetProvider extends AppWidgetProvider {
                 context, appWidgetId, configIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         views.setOnClickPendingIntent(R.id.widget_title, configPending);
 
-        // Click on list item opens file in Obsidian
-        Intent itemIntent = new Intent(Intent.ACTION_VIEW);
-        itemIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent itemPending = PendingIntent.getActivity(
+        // List item click template (broadcast to this provider)
+        Intent itemIntent = new Intent(context, TaskWidgetProvider.class);
+        PendingIntent itemPending = PendingIntent.getBroadcast(
                 context, appWidgetId + 1000, itemIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
         views.setPendingIntentTemplate(R.id.widget_list, itemPending);
